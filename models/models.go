@@ -11,6 +11,7 @@ type Person struct {
 
 // Data .. Is the Model for Data.
 type Data struct {
-	Persons []Person
-	Other   int
+	Persons     []Person
+	Other       int
+	ErrorString string
 }

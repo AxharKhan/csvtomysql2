@@ -43,7 +43,7 @@ func Create() error {
 }
 
 // Insert ...Inserts an entry into the database
-func Insert(person *models.Person) {
+func Insert(person *models.Person) error {
 	db := dbConn()
 	firstname := person.FirstName
 	lastname := person.LastName
@@ -51,11 +51,12 @@ func Insert(person *models.Person) {
 	bloodgroup := person.BloodGroup
 	insForm, err := db.Prepare("INSERT INTO Persons(first_name,last_name,age,blood_group) VALUES(?,?,?,?)")
 	if err != nil {
-		panic(err.Error())
+		return err
 	}
 	insForm.Exec(firstname, lastname, age, bloodgroup)
 	log.Println("INSERT: Name: " + firstname + " | bloodgroup: " + bloodgroup)
 	defer db.Close()
+	return nil
 }
 
 // Read ...Reads all entries from the database

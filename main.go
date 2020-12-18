@@ -31,8 +31,10 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 	file, header, er := r.FormFile("file") // where <<this>> is the controller and <<file>> the id of your form field
 	if er != nil {
 		errorstring = "Cannot Read the File please try again."
-		tmpl.ExecuteTemplate(w, "error", errorstring)
-
+		var data models.Data
+		data.ErrorString = errorstring
+		data.Other = 2
+		tmpl.ExecuteTemplate(w, "index", data)
 		return
 	}
 	if file != nil {
@@ -44,10 +46,11 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 		s := strings.Split(fileName, ".")
 
 		fileextension := s[1]
+		log.Println("file: " + fileextension)
 
 		if fileextension != "csv" {
-			errorstring = "This File Type is not supported."
-			tmpl.ExecuteTemplate(w, "error", errorstring)
+			return
+
 		}
 		// Parse the file
 		r := csv.NewReader(file)
@@ -62,9 +65,7 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			if err != nil {
-				errorstring = "Cannot Read the File please try again."
-				tmpl.ExecuteTemplate(w, "error", errorstring)
-
+				return
 			}
 
 			var person models.Person
@@ -74,17 +75,15 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 			person.LastName = record[1]
 			i, err = strconv.ParseInt(record[2], 10, 64)
 			if err != nil {
-				errorstring = "The data is not in the correct format. Please try another file. \n The correct Format is \"first_name,last_name,age,blood_group\" ."
-				tmpl.ExecuteTemplate(w, "error", errorstring)
+				return
 			}
 			person.Age = i
 			person.BloodGroup = record[3]
 
 			persons = append(persons, person)
-			logic.Insert(&person)
+			err = logic.Insert(&person)
 
 			if err != nil {
-				errorstring = "An error occured while trying to store the data, Please try again."
 				return
 			}
 			// csvdata += record[0] + "," + record[1] + "," + record[2] + "," + record[3] + ",\n"
@@ -97,8 +96,7 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 		tmpl.ExecuteTemplate(w, "index", data)
 
 	} else {
-		errorstring = "Cannot Read the File please try again."
-		tmpl.ExecuteTemplate(w, "error", errorstring)
+		return
 	}
 }
 
