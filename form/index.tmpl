@@ -1,0 +1,94 @@
+{{ define "index" }}
+  {{ template "header" }}
+
+    <div class="container">
+      <div class="row">
+        <div class="col s6">
+          <form
+            action="/upload"
+            method="post"
+            enctype="multipart/form-data">
+            <div class="file-field input-field">
+              <div class="btn">
+                <span>Upload Your File</span>
+                <input type="file" name="file" id="file" accept=".csv" />
+              </div>
+              <div class="file-path-wrapper">
+                <input
+                  class="file-path validate"
+                  type="text"
+                  placeholder="Please upload a single .csv file."
+                />
+              </div>
+            </div>
+            <input
+              type="submit"
+              name="submit"
+              value="submit"
+              class="btn btn-waves-effect"
+            />
+            {{if eq .Other 1}}
+            <div>
+            <h3>Data in the CSV File</h3>
+            <div class="divider"></div>
+            <table class="responsive-table highlight">
+              <tbody>
+                {{ range .Persons }}
+                <tr>
+                  <td>{{ .FirstName }}</td>
+                  <td>{{ .LastName }}</td>
+                  <td>{{ .Age }}</td>
+                  <td>{{ .BloodGroup }}</td>
+                </tr>
+                {{ end }}
+              </tbody>
+            </table>
+            </div>
+            {{ end }}
+          </form>
+        </div>
+        <div class="col s6">
+          <form action="/readdb" method="get" enctype="mutipart/readdb">
+            <input
+              type="submit"
+              name="read"
+              id="read"
+              value="Read Data From DB"
+              class="btn btn-waves-effect"
+            />
+            <div class="divider"></div>
+              {{if eq .Other 0}}
+
+            <table class="responsive-table highlight">
+              <thead>
+                <tr>
+                  <td>id</td>
+                  <td>first_name</td>
+                  <td>last_name</td>
+                  <td>age</td>
+                  <td>blood_group</td>
+                </tr>
+              </thead>
+              <tbody>
+                {{ range .Persons }}
+                <tr>
+                  <td>{{ .ID }}</td>
+                  <td>{{ .FirstName }}</td>
+                  <td>{{ .LastName }}</td>
+                  <td>{{ .Age }}</td>
+                  <td>{{ .BloodGroup }}</td>
+                </tr>
+                {{ end }}
+              </tbody>
+            </table>
+                {{end}}
+
+          </form>
+        </div>
+      </div>
+    </div>
+    <script>
+      M.AutoInit();
+    </script>
+  {{ template "footer" }}
+{{ end }}
