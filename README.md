@@ -2,8 +2,10 @@
 A web app that takes *.csv file and uploads them into a mysql database.
 
 ## Usage
-Use the following docker command in the repository directory.
-`docker compose up`
+1. Clone the Repo.
+2. Use the following docker command in the repository directory.
+    
+  ```docker compose up```
 
 ## References
 [Golang Basics](https://www.w3adda.com/golang-tutorial)
