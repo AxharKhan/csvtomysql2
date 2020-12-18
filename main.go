@@ -41,12 +41,9 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 		// get the filename
 		fileName := header.Filename
 
-		log.Println("file: " + fileName)
-
 		s := strings.Split(fileName, ".")
 
 		fileextension := s[1]
-		log.Println("file: " + fileextension)
 
 		if fileextension != "csv" {
 			return

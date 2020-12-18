@@ -54,7 +54,6 @@ func Insert(person *models.Person) error {
 		return err
 	}
 	insForm.Exec(firstname, lastname, age, bloodgroup)
-	log.Println("INSERT: Name: " + firstname + " | bloodgroup: " + bloodgroup)
 	defer db.Close()
 	return nil
 }
